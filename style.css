@@ -1,0 +1,22 @@
+body{
+    text-align: center;
+}
+
+form{
+    margin: 50px;
+}
+
+input{
+margin: 5px;
+}
+label{
+    font-size: 20px;
+    font-weight: 500px;
+}
+  
+h1 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+
