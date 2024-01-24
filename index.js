@@ -1,5 +1,7 @@
 
-
+let countContainer = document.getElementById('StudCount');
+const form = document.getElementById('studentDetailsForm');
+let student_count = 0; 
 
 ///  when the page relode so all the previous user data will rendered on the screen
 
@@ -9,13 +11,16 @@ window.addEventListener('DOMContentLoaded', (event) => {
             for (let i = 0; i < response.data.length; i++) {
                 showuserOnScreen(response.data[i], response.data[i]._id)
             }
+            // also show a total student count
+            student_count =response.data.length;
+            change_Student_Count(student_count);
         })
         .catch(error => console.log(error));
+
 })
 
 
 
-const form = document.getElementById('studentDetailsForm');
 
 form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -30,16 +35,22 @@ form.addEventListener('submit', (event) => {
        'phoneNumber': phoneNumber
     }
 
-   ///  post request
-    postRequest(obj)
-    .then(response => { showuserOnScreen(obj, response.data._id) })
-    .catch(error => console.log(error));
-
-    // making the input fields empty again after submit details
-    document.getElementById('Studentname').value ="";
-    document.getElementById('Address').value ="";
-    document.getElementById('phoneNumber').value ="";
+///  post request for adding student details on the server
+postRequest(obj)
+.then(response => { 
+    showuserOnScreen(obj, response.data._id)  
 })
+.catch(error => console.log(error));
+
+// making the input fields empty again after submit details
+    form.reset();
+})
+
+
+// updates student count 
+function change_Student_Count( count){
+    countContainer.innerHTML = `Total Student - ${count}`
+}
 
 
 
@@ -50,6 +61,7 @@ function showuserOnScreen(obj, userId) {
     const dltBtn = document.createElement('button');
     dltBtn.innerText = "delete";
     dltBtn.setAttribute('id', userId);
+    dltBtn.style.margin="10px"
 
     const editBtn = document.createElement("button");
     editBtn.innerText = 'edit';
@@ -62,7 +74,7 @@ function showuserOnScreen(obj, userId) {
     const  AllStudent = document.getElementById('AllStudent');
     AllStudent.append(li);
 
-
+ 
     // edit button  event listner
     editBtn.addEventListener('click', (event) => {
         editeUser(userId);
@@ -88,33 +100,39 @@ function editeUser(userId) {
         .catch(error => console.log(error))
 
     deletRequest(userId)
-
 }
+
 
 
 
 /// Axios requests 
 
+let Baseurl = "https://crudcrud.com/api/ec30c51f09514fada43d3afc8dd29dbf"
+
+
 function deletRequest(userId) {
-    axios.delete(`https://crudcrud.com/api/fe881c25c28b49a6a4a6aa5788385cd8/BookingAppointment/${userId}`)
+    axios.delete(`${Baseurl}/student/${userId}`)
         .then(response => {
             const userToRemove = document.getElementById(userId);
             if (userToRemove) {
                 userToRemove.parentNode.remove();
             }
+            student_count--;
+            change_Student_Count(student_count);
         })
         .catch(error => console.log(error))
 }
 
-
 function getRequest(userId) {
     if (userId) {
-        return axios.get(`https://crudcrud.com/api/fe881c25c28b49a6a4a6aa5788385cd8/BookingAppointment/${userId}`)
+        return axios.get(`${Baseurl}/student/${userId}`)
     }
-    return axios.get("https://crudcrud.com/api/fe881c25c28b49a6a4a6aa5788385cd8/BookingAppointment")
+    return axios.get(`${Baseurl}/student`)
 
 }
 
 function postRequest(obj) {
-    return axios.post("https://crudcrud.com/api/fe881c25c28b49a6a4a6aa5788385cd8/BookingAppointment", obj)
+    student_count++;
+    change_Student_Count(student_count);
+    return axios.post(`${Baseurl}/student`, obj)
 }
