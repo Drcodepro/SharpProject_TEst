@@ -8,11 +8,13 @@
     <link rel="stylesheet" href="style.css">
   </head>
 
+
   <body style="margin: 0">
 
     <!-- Write your code below -->
 
-    <h1>Student Manager</h1>
+    <h1 id="heading">Student Manager</h1>
+    <p id="StudCount"></p>
 
     <form id="studentDetailsForm" >
       <label >Student name:</label>
@@ -24,7 +26,7 @@
       <label >Phone Number:</label>
       <input type="tel" id="phoneNumber" name="phoneNumber">
 <br>
-      <button type="submit">Add</button>
+      <button type="submit" id="submitBtn">Add</button>
     </form>
 
 <div>
@@ -37,7 +39,7 @@
 
   </body>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.5/axios.min.js"></script>
 <script src="index.js"></script>
  
 </html>
