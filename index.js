@@ -12,7 +12,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 showuserOnScreen(response.data[i], response.data[i]._id)
             }
             // also show a total student count
-            student_count =response.data.length;
+            student_count = response.data.length;
             change_Student_Count(student_count);
         })
         .catch(error => console.log(error));
@@ -48,7 +48,7 @@ postRequest(obj)
 
 
 // updates student count 
-function change_Student_Count( count){
+function change_Student_Count(count){
     countContainer.innerHTML = `Total Student - ${count}`
 }
 
@@ -58,14 +58,17 @@ function change_Student_Count( count){
 
 function showuserOnScreen(obj, userId) {
     const li = document.createElement('li');
+    li.setAttribute('id', userId);
+
+    // created delete button
     const dltBtn = document.createElement('button');
     dltBtn.innerText = "delete";
-    dltBtn.setAttribute('id', userId);
-    dltBtn.style.margin="10px"
+    dltBtn.style.margin="10px";
 
+    // created edit button
     const editBtn = document.createElement("button");
     editBtn.innerText = 'edit';
-    editBtn.setAttribute('id', userId);
+
 
     // list item created that contains user details
     li.innerHTML = `${obj.Studentname} -- ${obj.Address} -- ${obj.phoneNumber}`
@@ -96,10 +99,11 @@ function editeUser(userId) {
             document.getElementById('Studentname').value = response.data.Studentname;
             document.getElementById('Address').value = response.data.Address;
             document.getElementById('phoneNumber').value = response.data.phoneNumber;
+            deletRequest(userId)
         })
         .catch(error => console.log(error))
 
-    deletRequest(userId)
+    
 }
 
 
@@ -107,7 +111,7 @@ function editeUser(userId) {
 
 /// Axios requests 
 
-let Baseurl = "https://crudcrud.com/api/ec30c51f09514fada43d3afc8dd29dbf"
+let Baseurl = "https://crudcrud.com/api/b78948aa08784554a89510939079ac4e"
 
 
 function deletRequest(userId) {
@@ -115,7 +119,7 @@ function deletRequest(userId) {
         .then(response => {
             const userToRemove = document.getElementById(userId);
             if (userToRemove) {
-                userToRemove.parentNode.remove();
+                userToRemove.remove();
             }
             student_count--;
             change_Student_Count(student_count);
@@ -128,7 +132,6 @@ function getRequest(userId) {
         return axios.get(`${Baseurl}/student/${userId}`)
     }
     return axios.get(`${Baseurl}/student`)
-
 }
 
 function postRequest(obj) {
